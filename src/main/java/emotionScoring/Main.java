@@ -1,23 +1,18 @@
 package emotionScoring;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        Emotions emotions = new Emotions();
-        emotions.initArray();
-
-        for (Emotion em : emotions
-             ) {
-
-        }
 
         ReadFile rf = new ReadFile();
-        try {
-            rf.read();
-        } catch (IOException e) {
-            e.printStackTrace();
+        List<String[]> list = rf.read();
+        // list.forEach(x -> System.out.println(Arrays.toString(x)));
+        for (String s : list.get(0)) {
+            System.out.println(s);
         }
     }
 }
