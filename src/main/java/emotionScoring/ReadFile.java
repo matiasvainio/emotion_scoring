@@ -1,22 +1,28 @@
 package emotionScoring;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 public class ReadFile {
 
-    public void read() throws IOException {
-        try (CSVReader reader = new CSVReader(new FileReader("src/main/java/emotionScoring/lexicon.csv"))) {
-            List<String[]> r = reader.readAll();
-            r.forEach(x -> System.out.println(Arrays.toString(x)));
+    public List read() throws IOException {
+        CSVParser csvParser = new CSVParserBuilder().withSeparator(' ').build();
+        try (CSVReader reader = new CSVReaderBuilder(
+                new FileReader("src/main/java/emotionScoring/origin_of_species.csv"))
+                .withCSVParser(csvParser)
+                .build()) {
+            return reader.readAll();
         } catch (CsvException e) {
             e.printStackTrace();
         }
+        return null;
     }
 }
