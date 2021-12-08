@@ -24,4 +24,17 @@ public class ReadFile {
         }
         return null;
     }
+
+    public List readLexicon() throws IOException {
+        CSVParser csvParser = new CSVParserBuilder().withSeparator(',').build();
+        try (CSVReader reader = new CSVReaderBuilder(
+                new FileReader("src/main/java/emotionScoring/lexicon.csv"))
+                .withCSVParser(csvParser)
+                .build()) {
+            return reader.readAll();
+        } catch (CsvException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

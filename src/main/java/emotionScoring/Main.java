@@ -7,8 +7,11 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        Emotion[] emotions = new Emotion[8];
+        Emotion[] emotions = new Emotion[10];
 
+
+        Emotion positive = new Emotion("Positive", 0);
+        Emotion negative = new Emotion("Negative", 0);
         Emotion anger = new Emotion("Anger", 0);
         Emotion anticipation = new Emotion("Anticipation", 0);
         Emotion disgust = new Emotion("Disgust", 0);
@@ -18,20 +21,34 @@ public class Main {
         Emotion surprise = new Emotion("Surprise", 0);
         Emotion trust = new Emotion("Trust", 0);
 
-        emotions[0] = anger;
-        emotions[1] = anticipation;
-        emotions[2] = disgust;
-        emotions[3] = fear;
-        emotions[4] = joy;
-        emotions[5] = sadness;
-        emotions[6] = surprise;
-        emotions[7] = trust;
+        emotions[0] = positive;
+        emotions[1] = negative;
+        emotions[2] = anger;
+        emotions[3] = anticipation;
+        emotions[4] = disgust;
+        emotions[5] = fear;
+        emotions[6] = joy;
+        emotions[7] = sadness;
+        emotions[8] = surprise;
+        emotions[9] = trust;
 
         ReadFile rf = new ReadFile();
+        List<String[]> lexicon = rf.readLexicon();
         List<String[]> list = rf.read();
-        // list.forEach(x -> System.out.println(Arrays.toString(x)));
+
+
         for (String s : list.get(0)) {
-            //System.out.println(s);
+            lexicon.forEach(x -> {
+                if (x[0].equalsIgnoreCase(s)) {
+                    for (int i = 1; i < x.length; i++) {
+                        if (x[i].equals("1")) {
+                            emotions[i - 1].count++;
+                        }
+                    }
+                }
+            });
         }
+
+        System.out.println(Arrays.toString(emotions));
     }
 }

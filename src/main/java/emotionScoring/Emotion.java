@@ -8,4 +8,12 @@ public class Emotion {
         word = w;
         count = c;
     }
+
+    @Override
+    public String toString() {
+        return "Emotion{" +
+                "word='" + word + '\'' +
+                ", count=" + count +
+                '}';
+    }
 }
