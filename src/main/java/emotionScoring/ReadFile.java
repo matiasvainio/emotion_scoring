@@ -12,10 +12,10 @@ import java.util.List;
 
 public class ReadFile {
 
-    public List read() throws IOException {
+    public List<String[]> read() throws IOException {
         CSVParser csvParser = new CSVParserBuilder().withSeparator(' ').build();
         try (CSVReader reader = new CSVReaderBuilder(
-                new FileReader("src/main/java/emotionScoring/origin_of_species.csv"))
+                new FileReader("src/main/java/emotionScoring/republikaanit.csv"))
                 .withCSVParser(csvParser)
                 .build()) {
             return reader.readAll();
@@ -25,7 +25,7 @@ public class ReadFile {
         return null;
     }
 
-    public List readLexicon() throws IOException {
+    public List<String[]> readLexicon() throws IOException {
         CSVParser csvParser = new CSVParserBuilder().withSeparator(',').build();
         try (CSVReader reader = new CSVReaderBuilder(
                 new FileReader("src/main/java/emotionScoring/lexicon.csv"))

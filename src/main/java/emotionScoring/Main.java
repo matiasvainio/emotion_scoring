@@ -1,54 +1,68 @@
 package emotionScoring;
 
+import com.opencsv.CSVWriter;
+
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        Emotion[] emotions = new Emotion[10];
-
-
-        Emotion positive = new Emotion("Positive", 0);
-        Emotion negative = new Emotion("Negative", 0);
-        Emotion anger = new Emotion("Anger", 0);
-        Emotion anticipation = new Emotion("Anticipation", 0);
-        Emotion disgust = new Emotion("Disgust", 0);
-        Emotion fear = new Emotion("Fear", 0);
-        Emotion joy = new Emotion("Joy", 0);
-        Emotion sadness = new Emotion("Sadness", 0);
-        Emotion surprise = new Emotion("Surprise", 0);
-        Emotion trust = new Emotion("Trust", 0);
-
-        emotions[0] = positive;
-        emotions[1] = negative;
-        emotions[2] = anger;
-        emotions[3] = anticipation;
-        emotions[4] = disgust;
-        emotions[5] = fear;
-        emotions[6] = joy;
-        emotions[7] = sadness;
-        emotions[8] = surprise;
-        emotions[9] = trust;
-
         ReadFile rf = new ReadFile();
         List<String[]> lexicon = rf.readLexicon();
         List<String[]> list = rf.read();
 
-
-        for (String s : list.get(0)) {
-            lexicon.forEach(x -> {
-                if (x[0].equalsIgnoreCase(s)) {
-                    for (int i = 1; i < x.length; i++) {
-                        if (x[i].equals("1")) {
-                            emotions[i - 1].count++;
+        List<String[]> arr = new ArrayList<>();
+        for (String[] strings : list) {
+            Emotions emotions = new Emotions("1");
+            for (String s : strings) {
+                lexicon.forEach(x -> {
+                    if (x[0].equalsIgnoreCase(s)) {
+                        for (int i = 1; i < x.length; i++) {
+                            if (x[i].equals("1")) {
+                                emotions.getEmotions()[i - 1].count++;
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
+//            System.out.println(Arrays.toString(emotions.getEmotions()));
+            for (int i = 0; i < emotions.getEmotions().length; i++)  {
+                emotions.getEmotions()[i].count = emotions.getEmotions()[i].count * 1000 / strings.length;
+            }
+            arr.add(emotions.getEmotionsStringArray());
         }
+        writeDataLineByLine(arr);
+    }
 
-        System.out.println(Arrays.toString(emotions));
+    public static void writeDataLineByLine(List<String[]> data) {
+        // first create file object for file placed at location
+        // specified by filepath
+        try {
+            // create FileWriter object with file as parameter
+            FileWriter outputfile = new FileWriter("src/main/java/emotionScoring/output_rep.csv");
+
+            // create CSVWriter object filewriter object as parameter
+            CSVWriter writer = new CSVWriter(outputfile);
+
+            // adding header to csv
+            String[] header = {"Positive", "Negative", "Anger", "Anticipation", "Disgust", "Fear", "Joy", "Sadness", "Surprise", "Trust", "REP (1)/DEM (0)"};
+            writer.writeNext(header);
+
+            // add data to csv
+            for (String[] datum : data) {
+                System.out.println(Arrays.toString(datum));
+                writer.writeNext(datum);
+            }
+
+            // closing writer connection
+            writer.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }
